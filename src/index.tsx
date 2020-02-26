@@ -10,7 +10,7 @@ const Content: React.FC = () => {
         return () => {
             alert('Effect cleanup');
         };
-    });
+    }, []);
 
     return (
         <>
