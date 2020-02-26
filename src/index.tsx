@@ -5,6 +5,13 @@ const Content: React.FC = () => {
     const [count1, setCount1] = useState(0);
     const [count2, setCount2] = useState(0);
 
+    useEffect(() => {
+        alert('Effect');
+        return () => {
+            alert('Effect cleanup');
+        };
+    });
+
     return (
         <>
             <div onClick={() => setCount1(count1 + 1)}>count1: {count1}</div>
