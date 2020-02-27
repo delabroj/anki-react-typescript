@@ -12,18 +12,8 @@ const themes = {
     },
 };
 
-const ThemeContext = React.createContext({ theme: themes.light, switchTheme: () => {} });
-
 const App: React.FC = () => {
-    const [light, setLight] = useState(true);
-
-    return (
-        <ThemeContext.Provider
-            value={{ theme: light ? themes.light : themes.dark, switchTheme: () => setLight(!light) }}
-        >
-            <Toolbar />
-        </ThemeContext.Provider>
-    );
+    return <Toolbar />;
 };
 
 const Toolbar: React.FC = () => (
@@ -33,7 +23,16 @@ const Toolbar: React.FC = () => (
 );
 
 const ThemedButton: React.FC = () => {
-    return <button>I am styled by theme context!</button>;
+    const themeContext = useContext(ThemeContext);
+
+    return (
+        <button
+            onClick={themeContext.switchTheme}
+            style={{ background: themeContext.theme.background, color: themeContext.theme.foreground }}
+        >
+            I am styled by theme context!
+        </button>
+    );
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
