@@ -1,47 +1,44 @@
-import React, { useContext, useState } from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-const themes = {
-    light: {
-        foreground: '#000000',
-        background: '#eeeeee',
-    },
-    dark: {
-        foreground: '#ffffff',
-        background: '#222222',
-    },
+enum ActionType {
+    Increment = 'increment',
+    Decrement = 'decrement',
+}
+
+interface State {
+    count: number;
+}
+
+interface Action {
+    type: ActionType;
+    payload: {
+        count: number;
+    };
+}
+
+const initialState: State = { count: 0 };
+
+const reducer: React.Reducer<State, Action> = (state, action) => {
+    switch (action.type) {
+        case ActionType.Increment:
+            return { count: state.count + action.payload.count };
+        case ActionType.Decrement:
+            return { count: state.count - action.payload.count };
+    }
 };
 
-const ThemeContext = React.createContext({ theme: themes.light, switchTheme: () => {} });
-
-const App: React.FC = () => {
-    const [light, setLight] = useState(true);
+const App = () => {
+    const [state, dispatch] = React.useReducer<React.Reducer<State, Action>>(reducer, initialState);
 
     return (
-        <ThemeContext.Provider
-            value={{ theme: light ? themes.light : themes.dark, switchTheme: () => setLight(!light) }}
-        >
-            <Toolbar />
-        </ThemeContext.Provider>
-    );
-};
-
-const Toolbar: React.FC = () => (
-    <div>
-        <ThemedButton />
-    </div>
-);
-
-const ThemedButton: React.FC = () => {
-    const themeContext = useContext(ThemeContext);
-
-    return (
-        <button
-            onClick={themeContext.switchTheme}
-            style={{ background: themeContext.theme.background, color: themeContext.theme.foreground }}
-        >
-            I am styled by theme context!
-        </button>
+        <div>
+            <div>Count: {state.count}</div>
+            <button onClick={() => dispatch({ type: ActionType.Increment, payload: { count: 5 } })}>+5</button>
+            <button onClick={() => dispatch({ type: ActionType.Increment, payload: { count: 1 } })}>+1</button>
+            <button onClick={() => dispatch({ type: ActionType.Decrement, payload: { count: 1 } })}>-1</button>
+            <button onClick={() => dispatch({ type: ActionType.Decrement, payload: { count: 5 } })}>-5</button>
+        </div>
     );
 };
 

@@ -1,37 +1,42 @@
-import React, { useContext, useState } from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-const themes = {
-    light: {
-        foreground: '#000000',
-        background: '#eeeeee',
-    },
-    dark: {
-        foreground: '#ffffff',
-        background: '#222222',
-    },
+enum ActionType {
+    Increment = 'increment',
+    Decrement = 'decrement',
+}
+
+interface State {
+    count: number;
+}
+
+interface Action {
+    type: ActionType;
+    payload: {
+        count: number;
+    };
+}
+
+const initialState: State = { count: 0 };
+
+const reducer: React.Reducer<State, Action> = (state, action) => {
+    switch (action.type) {
+        case ActionType.Increment:
+            return { count: state.count + action.payload.count };
+        case ActionType.Decrement:
+            return { count: state.count - action.payload.count };
+    }
 };
 
-const App: React.FC = () => {
-    return <Toolbar />;
-};
-
-const Toolbar: React.FC = () => (
-    <div>
-        <ThemedButton />
-    </div>
-);
-
-const ThemedButton: React.FC = () => {
-    const themeContext = useContext(ThemeContext);
-
+const App = () => {
     return (
-        <button
-            onClick={themeContext.switchTheme}
-            style={{ background: themeContext.theme.background, color: themeContext.theme.foreground }}
-        >
-            I am styled by theme context!
-        </button>
+        <div>
+            <div>Count: 0</div>
+            <button>+5</button>
+            <button>+1</button>
+            <button>-1</button>
+            <button>-5</button>
+        </div>
     );
 };
 
