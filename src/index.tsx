@@ -1,34 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-const Content: React.FC = () => {
-    const [count1, setCount1] = useState(0);
-    const [count2, setCount2] = useState(0);
+const themes = {
+    light: {
+        foreground: '#000000',
+        background: '#eeeeee',
+    },
+    dark: {
+        foreground: '#ffffff',
+        background: '#222222',
+    },
+};
 
-    useEffect(() => {
-        alert('Effect');
-        return () => {
-            alert('Effect cleanup');
-        };
-    }, []);
+const ThemeContext = React.createContext({ theme: themes.light, switchTheme: () => {} });
+
+const App: React.FC = () => {
+    const [light, setLight] = useState(true);
 
     return (
-        <>
-            <div onClick={() => setCount1(count1 + 1)}>count1: {count1}</div>
-            <div onClick={() => setCount2(count2 + 1)}>count2: {count2}</div>
-        </>
+        <ThemeContext.Provider
+            value={{ theme: light ? themes.light : themes.dark, switchTheme: () => setLight(!light) }}
+        >
+            <Toolbar />
+        </ThemeContext.Provider>
     );
 };
 
-const App: React.FC = () => {
-    const [on, setOn] = React.useState(false);
+const Toolbar: React.FC = () => (
+    <div>
+        <ThemedButton />
+    </div>
+);
 
-    return (
-        <div>
-            <button onClick={() => setOn(!on)}>Turn {on ? 'off' : 'on'}</button>
-            {on && <Content />}
-        </div>
-    );
+const ThemedButton: React.FC = () => {
+    return <button>I am styled by theme context!</button>;
 };
 
 ReactDOM.render(<App />, document.getElementById('root'));
