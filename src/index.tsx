@@ -1,23 +1,20 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-enum ActionType {
-    Increment = 'increment',
-    Decrement = 'decrement',
-}
-
 interface State {
     count: number;
 }
 
-interface Action {
-    type: ActionType;
-    payload: {
-        count: number;
-    };
-}
-
 const initialState: State = { count: 0 };
+
+const reducer: React.Reducer<State, Action> = (state, action) => {
+    switch (action.type) {
+        case ActionType.Increment:
+            return { count: state.count + action.payload.count };
+        case ActionType.Decrement:
+            return { count: state.count - action.payload.count };
+    }
+};
 
 const App = () => {
     const [state, dispatch] = React.useReducer<React.Reducer<State, Action>>(reducer, initialState);
