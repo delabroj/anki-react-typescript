@@ -1,13 +1,15 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
+interface State {
+    count: number;
+}
+
+const initialState: State = { count: 0 };
+
 enum ActionType {
     Increment = 'increment',
     Decrement = 'decrement',
-}
-
-interface State {
-    count: number;
 }
 
 interface Action {
@@ -16,8 +18,6 @@ interface Action {
         count: number;
     };
 }
-
-const initialState: State = { count: 0 };
 
 const reducer: React.Reducer<State, Action> = (state, action) => {
     switch (action.type) {
