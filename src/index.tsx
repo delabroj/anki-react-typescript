@@ -1,11 +1,17 @@
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-interface State {
-    count: number;
+enum ActionType {
+    Increment = 'increment',
+    Decrement = 'decrement',
 }
 
-const initialState: State = { count: 0 };
+interface Action {
+    type: ActionType;
+    payload: {
+        count: number;
+    };
+}
 
 const reducer: React.Reducer<State, Action> = (state, action) => {
     switch (action.type) {
